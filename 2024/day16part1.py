@@ -15,11 +15,11 @@ class Node:
         self.facing = facing
 
     def __hash__(self):
-        return hash(self.pos)
+        return hash((self.pos, self.facing))
     
     def __eq__(self, other):
         if isinstance(other, Node):
-            return self.pos == other.pos
+            return self.pos == other.pos and self.facing == other.facing
         return False
 
     def __lt__(self, other):
@@ -66,7 +66,7 @@ def astar():
 
     while len(open_set) != 0:
         cn = heappop(open_set)
-        if cn.pos == e_pos.pos: return (get_path(came_from, cn), g_score[e_pos])
+        if cn.pos == e_pos.pos: return (get_path(came_from, cn), g_score[cn])
 
         for dx, dy in [(0, 1), (1, 0), (-1, 0), (0, -1)]:
             if m[cn.pos[0]+dy][cn.pos[1]+dx] == '#': continue
@@ -95,5 +95,5 @@ r_path, cost = astar()
 r_path = [node.pos for node in r_path]
 
 print(cost)
-# print('\n'.join([''.join('O' if (i, j) in r_path else m[i][j] for j in range(c)) for i in range(r)]))
+print('\n'.join([''.join('O' if (i, j) in r_path else m[i][j] for j in range(c)) for i in range(r)]))
 
